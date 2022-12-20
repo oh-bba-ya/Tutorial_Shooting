@@ -4,7 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "CodeTest.generated.h"
+#include "PointerTest.h"			// .h파일에서 .h 파일을 include 하게 될시 추후에 너무나 많은 클래스로 인해 중복이 많아진다. 그래서 전방 클래스라는 방법을 사용한다.
+#include "CodeTest.generated.h"			// 반드시 외부 클래스 #include 시 generated.h 보다 위에 추가해야한다. 만약 밑이면 인식못함(언리얼 규칙)
+
+
 
 UCLASS()
 class SHOOTING_API ACodeTest : public AActor
@@ -105,11 +108,38 @@ public:
 
 
 #pragma region Off Warning
+	/*
 	int32 result;
 
 	int32 GetNum(int n);
+	*/
 #pragma endregion
 
+
+
+#pragma region TArray TMap
+	//UPROPERTY(EditAnywhere, Category = CodeVariable)
+	//TArray<int32> ages;
+
+	//UPROPERTY(EditAnywhere, Category = CodeVariable)
+	//TMap<FString, float> distances;
+
+#pragma endregion
+
+
+#pragma region PointerActor
+
+// 헤더파일을 포함하기 보다 class를 전방 선언함으로써 이런 클래스가 있다는것을 알려주고 사용한다.
+UPROPERTY(EditAnywhere, Category = CodeVariable)
+class APointerTest* pointerTest;	
+
+
+// 여러개의 클래스를 바꾸고 싶을때
+UPROPERTY(EditAnywhere, Category = CodeVariable)
+TArray<class APointerTest*> pointerTestArray;
+
+ 
+#pragma endregion
 
 
 
