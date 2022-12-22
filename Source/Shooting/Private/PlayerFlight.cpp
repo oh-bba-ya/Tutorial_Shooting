@@ -62,9 +62,10 @@ void APlayerFlight::Tick(float DeltaTime)
 	direction.Normalize();			// 방향 단위벡터로 바꾸기
 
 	// FVector dir = GetActorLocation() +  direction.Normalize() * moveSpeed * DeltaTime;
-// 위의 코드가 동작하지 않는 이유는 direction.Normalize()의 경우 반환 값이 없기 때문에 moveSpeed와 계산이 안된다.
-// 때문에 위에서 먼저 direction을 단위벡터로 변경한 다음 moveSpeed와 변경해줘야한다.
+    // 위의 코드가 동작하지 않는 이유는 direction.Normalize()의 경우 반환 값이 없기 때문에 moveSpeed와 계산이 안된다.
+    // 때문에 위에서 먼저 direction을 단위벡터로 변경한 다음 moveSpeed와 변경해줘야한다.
 
+	// p = p0 + vt
 	FVector dir = GetActorLocation() +  direction * moveSpeed * DeltaTime;
 	SetActorLocation(dir);
 
