@@ -9,6 +9,7 @@
 #include "GameFramework/Controller.h"
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 APlayerFlight::APlayerFlight()
@@ -41,6 +42,21 @@ APlayerFlight::APlayerFlight()
 		// 로드한 파일을 메시 컴포넌트의 static mesh 항목에 넣는다.
 		meshComp->SetStaticMesh(cubeMesh.Object);
 	}
+
+	// 오버랩 이벤트를 켠다.
+	boxComp->SetGenerateOverlapEvents(true);
+
+	// 충돌 응답을 Query And Physics로 설정한다.
+	boxComp->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+
+	// Object Type을 1번 채널로(Player)로 설정한다.
+	boxComp->SetCollisionObjectType(ECC_GameTraceChannel1);
+
+	// 모든 채널을 충돌 응답 없음으로 설정한다.
+	boxComp->SetCollisionResponseToAllChannels(ECR_Ignore);
+
+	// Enemy와는 충돌 이벤트 체크(Quary)를 한다.
+	boxComp->SetCollisionResponseToChannel(ECC_GameTraceChannel2, ECR_Overlap);
 
 
 
@@ -114,7 +130,7 @@ void APlayerFlight::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 	*/
 
 	
-	// 기존 입력 방식 바인딩 해제
+	// 기존 입력 방식 바인딩
 	// Horizontal Axis 입력에 함수를 연결한다.
 	PlayerInputComponent->BindAxis("Horizontal", this, &APlayerFlight::Horizontal);
 

@@ -17,18 +17,10 @@ AEnemy::AEnemy()
 	boxComp = CreateDefaultSubobject<UBoxComponent>(TEXT("Collision"));
 	SetRootComponent(boxComp);
 	boxComp->SetBoxExtent(FVector(50.0f));
-	// Collision Enabled 값을 Query and Physics로 설정한다.
-	boxComp->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 
-	// 응답 채널의 Object Type을 "Enemy"로 설정한다.
-	boxComp->SetCollisionObjectType(ECC_GameTraceChannel2);
+	// Collsion presets을 Enemy 프리셋으로 변경
+	boxComp->SetCollisionProfileName(TEXT("Enemy"));
 
-	// 응답 채널을 일괄적으로 Ignore 상태로 처리한다.
-	boxComp->SetCollisionResponseToAllChannels(ECR_Ignore);
-
-	// 응답 채널을 Player와 bullet 채널에 대해서만 overlap으로 처리한다.
-	boxComp->SetCollisionResponseToChannel(ECC_GameTraceChannel1, ECR_Overlap);
-	boxComp->SetCollisionResponseToChannel(ECC_GameTraceChannel3, ECR_Overlap);
 
 	meshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	meshComp->SetRelativeLocation(FVector(0, 0, -50));
@@ -96,12 +88,17 @@ void AEnemy::Tick(float DeltaTime)
 
 void AEnemy::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
+	// 충돌한 대상 액터를 APlayerPawn 클래스로 변환을 시도
 	APlayerFlight* player = Cast<APlayerFlight>(OtherActor);
 
+	// 만일, 캐스팅 성공
 	if (player != nullptr)
 	{
-		player->Destroy();
-		Destroy();
+		//부딪힌 대상 액터 제거
+		OtherActor->Destroy();
 	}
+
+	// 자기 자신을 제거한다.
+	Destroy();
 }
 
