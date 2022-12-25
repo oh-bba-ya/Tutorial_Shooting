@@ -6,6 +6,9 @@
 #include "Components/StaticMeshComponent.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Bullet.h"
+#include "GameFramework/Controller.h"
+#include "EnhancedInputSubsystems.h"
+#include "EnhancedInputComponent.h"
 
 // Sets default values
 APlayerFlight::APlayerFlight()
@@ -48,6 +51,18 @@ APlayerFlight::APlayerFlight()
 void APlayerFlight::BeginPlay()
 {
 	Super::BeginPlay();
+
+	// 플레이어 컨트롤러를 캐스팅한다.
+	APlayerController* playerCon = Cast<APlayerController>(GetController());
+
+	// nullPtr 체크
+	if (playerCon != nullptr) {
+		UEnhancedInputLocalPlayerSubsystem* subsys = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(playerCon->GetLocalPlayer());
+		
+		if (subsys != nullptr) {
+			subsys->AddMappingContext(imc_myMapping, 0);
+		}
+	}
 	
 }
 
@@ -77,6 +92,8 @@ void APlayerFlight::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+	/*
+	* 기존 입력 방식 바인딩 해제
 	// Horizontal Axis 입력에 함수를 연결한다.
 	PlayerInputComponent->BindAxis("Horizontal", this, &APlayerFlight::Horizontal);
 
@@ -87,12 +104,27 @@ void APlayerFlight::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
 	// Fire Action 입력에 함수를 연결한다.
 	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &APlayerFlight::FireBullet);
+	*/
 
 
+	// 기존의 UInputComponent* 변수를 UEnhancedInputComponent* 로 변환한다.
+	UEnhancedInputComponent* enhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent);
+
+
+	// 함수 연결하기
+	enhancedInputComponent->BindAction(ia_horizontal, ETriggerEvent::Triggered, this, &APlayerFlight::Horizontal);
+	enhancedInputComponent->BindAction(ia_horizontal, ETriggerEvent::Completed, this, &APlayerFlight::Horizontal);
+
+	enhancedInputComponent->BindAction(ia_vertical, ETriggerEvent::Triggered, this, &APlayerFlight::Vertical);
+	enhancedInputComponent->BindAction(ia_vertical, ETriggerEvent::Completed, this, &APlayerFlight::Vertical);
+
+	enhancedInputComponent->BindAction(ia_fire, ETriggerEvent::Triggered, this, &APlayerFlight::FireBullet);
 
 }
 
 
+/*
+* 기존 입력방식 함수 주석처리
 // 좌우 입력이 있을 때 실행될 함수
 void APlayerFlight::Horizontal(float value) {
 	h = value;
@@ -100,13 +132,31 @@ void APlayerFlight::Horizontal(float value) {
 	direction.Y = h;
 }
 
-
 // 상하 입력이 있을 때 실행될 함수
 void APlayerFlight::Vertical(float value) {
 	v = value;
 	direction.Z = v;
 	//UE_LOG(LogTemp, Warning, TEXT("v : %.4f"), v);
 }
+*/
+
+
+void APlayerFlight::Horizontal(const FInputActionValue& value)
+{
+	h = value.Get<float>();
+	UE_LOG(LogTemp, Warning, TEXT("h : %.4f"), h);
+	direction.Y = h;
+}
+
+void APlayerFlight::Vertical(const FInputActionValue& value)
+{
+	v = value.Get<float>();
+	UE_LOG(LogTemp, Warning, TEXT("v : %.4f"), v);
+	direction.Z = v
+}
+
+
+
 
 // 마우스 왼쪽 버튼을 눌렀을 때 실행될 함수.
 void APlayerFlight::FireBullet()

@@ -4,7 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
+#include "InputActionValue.h"
 #include "PlayerFlight.generated.h"
+
 
 UCLASS()
 class SHOOTING_API APlayerFlight : public APawn
@@ -40,10 +42,46 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerSettings)
 	TSubclassOf<class ABullet> bulletFactory;
 
+
+
+	// 생성한 Input Action, Mapping Context를 C++ 변수 만들기
+	UPROPERTY(EditDefaultsOnly, Category = PlayerSettings)
+		class UInputAction* ia_horizontal;
+
+	UPROPERTY(EditDefaultsOnly, Category = PlayerSettings)
+		class UInputAction* ia_vertical;
+
+	UPROPERTY(EditDefaultsOnly, Category = PlayerSettings)
+		class UInputAction* ia_fire;
+
+	UPROPERTY(EditDefaultsOnly, Category = PlayerSettings)
+		class UInputMappingContext* imc_myMapping;
+
+
 private:
+	// 블루프린트에서 호출하기
+	/*
+	UFUNCTION(BlueprintCallable)
 	void Horizontal(float value);
+
+	UFUNCTION(BlueprintCallable)
 	void Vertical(float value);
+
+	UFUNCTION(BlueprintCallable)
 	void FireBullet();		// action의 경우 parameter를 비워야한다. , 반환도 마찬가지 void
+	*/
+
+	// EnhancedInput 함수
+	UFUNCTION(BlueprintCallable)
+		void Horizontal(const FInputActionValue& value);
+
+	UFUNCTION(BlueprintCallable)
+		void Vertical(const FInputActionValue& value);
+
+	UFUNCTION(BlueprintCallable)
+		void FireBullet();
+
+
 
 
 	float h;
