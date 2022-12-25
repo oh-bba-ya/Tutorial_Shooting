@@ -57,11 +57,16 @@ void APlayerFlight::BeginPlay()
 
 	// nullPtr 체크
 	if (playerCon != nullptr) {
+		UE_LOG(LogTemp, Warning, TEXT("ptr"));
 		UEnhancedInputLocalPlayerSubsystem* subsys = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(playerCon->GetLocalPlayer());
 		
 		if (subsys != nullptr) {
+			UE_LOG(LogTemp, Warning, TEXT("ptr2"));
 			subsys->AddMappingContext(imc_myMapping, 0);
 		}
+	}
+	else {
+		UE_LOG(LogTemp, Warning, TEXT("Nullptr"));
 	}
 	
 }
@@ -92,8 +97,24 @@ void APlayerFlight::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+
+	// 기존의 UInputComponent* 변수를 UEnhancedInputComponent* 로 변환한다.
+	UEnhancedInputComponent* enhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent);
+
 	/*
-	* 기존 입력 방식 바인딩 해제
+	// EnhancedInput 바인딩
+	// 함수 연결하기
+	enhancedInputComponent->BindAction(ia_horizontal, ETriggerEvent::Triggered, this, &APlayerFlight::Horizontal);
+	enhancedInputComponent->BindAction(ia_horizontal, ETriggerEvent::Completed, this, &APlayerFlight::Horizontal);
+
+	enhancedInputComponent->BindAction(ia_vertical, ETriggerEvent::Triggered, this, &APlayerFlight::Vertical);
+	enhancedInputComponent->BindAction(ia_vertical, ETriggerEvent::Completed, this, &APlayerFlight::Vertical);
+
+	enhancedInputComponent->BindAction(ia_fire, ETriggerEvent::Triggered, this, &APlayerFlight::FireBullet);
+	*/
+
+	
+	// 기존 입력 방식 바인딩 해제
 	// Horizontal Axis 입력에 함수를 연결한다.
 	PlayerInputComponent->BindAxis("Horizontal", this, &APlayerFlight::Horizontal);
 
@@ -104,27 +125,15 @@ void APlayerFlight::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
 	// Fire Action 입력에 함수를 연결한다.
 	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &APlayerFlight::FireBullet);
-	*/
+	
 
 
-	// 기존의 UInputComponent* 변수를 UEnhancedInputComponent* 로 변환한다.
-	UEnhancedInputComponent* enhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent);
-
-
-	// 함수 연결하기
-	enhancedInputComponent->BindAction(ia_horizontal, ETriggerEvent::Triggered, this, &APlayerFlight::Horizontal);
-	enhancedInputComponent->BindAction(ia_horizontal, ETriggerEvent::Completed, this, &APlayerFlight::Horizontal);
-
-	enhancedInputComponent->BindAction(ia_vertical, ETriggerEvent::Triggered, this, &APlayerFlight::Vertical);
-	enhancedInputComponent->BindAction(ia_vertical, ETriggerEvent::Completed, this, &APlayerFlight::Vertical);
-
-	enhancedInputComponent->BindAction(ia_fire, ETriggerEvent::Triggered, this, &APlayerFlight::FireBullet);
 
 }
 
 
-/*
-* 기존 입력방식 함수 주석처리
+
+// 기존 입력방식 함수 주석처리
 // 좌우 입력이 있을 때 실행될 함수
 void APlayerFlight::Horizontal(float value) {
 	h = value;
@@ -138,11 +147,13 @@ void APlayerFlight::Vertical(float value) {
 	direction.Z = v;
 	//UE_LOG(LogTemp, Warning, TEXT("v : %.4f"), v);
 }
-*/
 
 
+/*
+// EnhancedInput 입력 함수.
 void APlayerFlight::Horizontal(const FInputActionValue& value)
 {
+	UE_LOG(LogTemp, Warning, TEXT("hori"));
 	h = value.Get<float>();
 	UE_LOG(LogTemp, Warning, TEXT("h : %.4f"), h);
 	direction.Y = h;
@@ -150,10 +161,12 @@ void APlayerFlight::Horizontal(const FInputActionValue& value)
 
 void APlayerFlight::Vertical(const FInputActionValue& value)
 {
+	UE_LOG(LogTemp, Warning, TEXT("ver"));
 	v = value.Get<float>();
 	UE_LOG(LogTemp, Warning, TEXT("v : %.4f"), v);
 	direction.Z = v;
 }
+*/
 
 
 
