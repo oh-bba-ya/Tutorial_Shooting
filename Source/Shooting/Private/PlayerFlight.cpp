@@ -152,7 +152,7 @@ void APlayerFlight::Vertical(const FInputActionValue& value)
 {
 	v = value.Get<float>();
 	UE_LOG(LogTemp, Warning, TEXT("v : %.4f"), v);
-	direction.Z = v
+	direction.Z = v;
 }
 
 
