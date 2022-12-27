@@ -94,11 +94,17 @@ void AEnemy::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherAc
 	// 만일, 캐스팅 성공
 	if (player != nullptr)
 	{
-		//부딪힌 대상 액터 제거
-		OtherActor->Destroy();
+		//부딪힌 대상(플레이어) 액터 제거
+		//player->Destroy();
+		player->ReservationHitColor(0.2f);
+
+		//Destroy();
+
+	}
+	else {
+		//  플레이어가 아닌 다른 액터와 충돌시 자기 자신을 제거한다. 
+		Destroy();
 	}
 
-	// 자기 자신을 제거한다.
-	Destroy();
 }
 

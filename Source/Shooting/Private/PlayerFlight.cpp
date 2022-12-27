@@ -84,7 +84,27 @@ void APlayerFlight::BeginPlay()
 	else {
 		UE_LOG(LogTemp, Warning, TEXT("Nullptr"));
 	}
+
+	// 현재 색상 값을 저장한다
+	UMaterialInterface* iMat = meshComp->GetMaterial(0);
+	FHashedMaterialParameterInfo param = FHashedMaterialParameterInfo(TEXT("myColor"));		// TEXT : 이름의 경우 생성한 메테리얼 더블 클릭 후 Global Vector Parameter Values 값을 말하는거다.
 	
+	// Material Interface에서 벡터 파라미터 값을 initColor 변수에 저장한다.
+	iMat->GetVectorParameterValue(param, initColor);
+
+	// 출력 확인
+	UE_LOG(LogTemp, Warning, TEXT("%f, %f, %f"), initColor.R, initColor.G, initColor.B);
+
+
+	// Material Interface를 이용해서 Material Instance Dynamic 개체를 만든다.
+	dynamicMat = UMaterialInstanceDynamic::Create(iMat, this);
+
+	if (dynamicMat != nullptr) {
+		// 생성한 다이나믹 메터리얼을 메시에 설정한다.
+		meshComp->SetMaterial(0, dynamicMat);
+	}
+
+
 }
 
 // Called every frame
@@ -103,7 +123,8 @@ void APlayerFlight::Tick(float DeltaTime)
 
 	// p = p0 + vt
 	FVector dir = GetActorLocation() +  direction * moveSpeed * DeltaTime;
-	SetActorLocation(dir);
+	// Sweep 파라미터를 통해 block 적용 움직임을 할 수 있다.
+	SetActorLocation(dir,true);
 
 
 }
@@ -144,7 +165,27 @@ void APlayerFlight::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 	
 
 
+}
 
+
+void APlayerFlight::ReservationHitColor(float time)
+{
+	// 1. 색상을 Red 색깔로 변경한다.
+	dynamicMat->SetVectorParameterValue(TEXT("myColor"), (FVector4)FLinearColor::Red);
+
+	// 2. 원래 색상으로 되돌리는 함수를 바인딩한 타이머를 예약한다.
+
+
+	// Timer의 경우 입력값이 없고 반환형이 없는 함수만 바인딩 가능하다.
+	GetWorld()->GetTimerManager().SetTimer(colorTimer, this, &APlayerFlight::ChangeOriginColor, time, false);
+}
+
+
+void APlayerFlight::ChangeOriginColor()
+{
+
+	// 변수명을 파라미터에 넣어야함
+	dynamicMat->SetVectorParameterValue(TEXT("myColor"), (FVector4)initColor);
 }
 
 
@@ -206,4 +247,11 @@ void APlayerFlight::FireBullet()
 	// 총알 블루프린트 변수
 	GetWorld()->SpawnActor<ABullet>(bulletFactory, spawnPosition, spawnRotation,param);
 
+	// 총알 발사 효과음을 실행한다.
+	UGameplayStatics::PlaySound2D(this, fireSound);
+
+
+
 }
+
+

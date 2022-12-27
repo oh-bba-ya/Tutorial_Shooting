@@ -57,6 +57,16 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = PlayerSettings)
 		class UInputMappingContext* imc_myMapping;
 
+	void ReservationHitColor(float time);
+
+	void ChangeOriginColor();
+
+
+	UPROPERTY(EditDefaultsOnly, Category = PlayerSettings)
+	class USoundBase* fireSound;
+
+	
+
 
 private:
 	// 블루프린트에서 호출하기
@@ -83,5 +93,9 @@ private:
 	float v;
 
 	FVector direction;
+	FLinearColor initColor;				
+	FTimerHandle colorTimer;
+	UMaterialInstanceDynamic* dynamicMat;
+
 
 };

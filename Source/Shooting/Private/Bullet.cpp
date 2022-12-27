@@ -5,6 +5,8 @@
 #include "Components/BoxComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Enemy.h"
+#include "Kismet/GameplayStatics.h"
+#include "MyShootingGameModeBase.h"
 
 // Sets default values
 ABullet::ABullet()
@@ -39,6 +41,13 @@ void ABullet::BeginPlay()
 	// 박스 컴포넌트의 충돌 오버랩 이벤트에 BulletOverlap 함수를 연결한다.
 	boxComp->OnComponentBeginOverlap.AddDynamic(this, &ABullet::OnBulletOverlap);
 	
+
+	// 2초 후 액터 제거
+	// SetLifeSpan(2.0f);
+
+	// TimeManager를 이용한 Destory 적용
+	GetWorld()->GetTimerManager().SetTimer(lifeTimer, this, &ABullet::DestroyMySelf, 2.0f, false);
+
 }
 
 // Called every frame
@@ -64,11 +73,28 @@ void ABullet::OnBulletOverlap(UPrimitiveComponent* OverlappedComponent, AActor* 
 
 	// 만일 캐스팅이 정상적으로 되어서 AEnemy 포인터 변수에 값이 있다면
 	if (enemy != nullptr) {
+
+		// 적이 있던 위치에 폭발 이펙트를 생성한다.
+		FVector enemyLocation = enemy->GetActorLocation();
+		FRotator enemyRotation = enemy->GetActorRotation();
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), explosion_effect, enemyLocation, enemyRotation, true);
+
 		// 충돌할 액터를 제거한다.
-		OtherActor->Destroy();
+		enemy->Destroy();
+
+		// 게임 모드의 점수를 1점 추가한다.
+		AGameModeBase* gm = UGameplayStatics::GetGameMode(this);
+		AMyShootingGameModeBase* myGM = Cast<AMyShootingGameModeBase>(gm);
+		myGM->AddScore(1);
+		UE_LOG(LogTemp, Warning, TEXT("point : %d"), myGM->GetCurrentScore());
 	}
 
 	// 자기 자신을 제거
+	Destroy();
+}
+
+void ABullet::DestroyMySelf()
+{
 	Destroy();
 }
 
