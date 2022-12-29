@@ -6,6 +6,7 @@
 #include "Components/StaticMeshComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "PlayerFlight.h"
+#include "MyShootingGameModeBase.h"
 #include "EngineUtils.h"
 
 // Sets default values
@@ -95,10 +96,18 @@ void AEnemy::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherAc
 	if (player != nullptr)
 	{
 		//부딪힌 대상(플레이어) 액터 제거
-		//player->Destroy();
+		player->Destroy();
+
+		// 메뉴 위젯을 생성하는 함수를 실행한다.
+		AMyShootingGameModeBase* gm = Cast<AMyShootingGameModeBase>(GetWorld()->GetAuthGameMode());
+
+		if (gm != nullptr) {
+			gm->ShowMenu();
+		}
+
+		// 플레이어 색상 변경
 		player->ReservationHitColor(0.2f);
 
-		//Destroy();
 
 	}
 	else {
