@@ -90,3 +90,30 @@ void AMyShootingGameModeBase::ShowMenu()
 	GetWorld()->GetFirstPlayerController()->SetShowMouseCursor(true);
 
 }
+
+void AMyShootingGameModeBase::SaveEnemy(AEnemy* enemy)
+{
+	enemies.Add(enemy);
+}
+
+void AMyShootingGameModeBase::RemoveEnemy()
+{
+
+	// 배열이 비어있는지 검사. 
+	// 배열이 비어있을때 Destory() 함수를 호출하게 되면 크래쉬 발생
+	if (enemies.IsEmpty()) {
+		return;
+	}
+
+	// enemy 배열이 비어 있지 않다면 다음 반복문 실행
+	// Num() : 배열의 크기
+	for (int32 i = 0; i < enemies.Num(); i++) {
+		enemies[i]->DestroyMySelf();
+		enemies[i]->Destroy();
+		this->AddScore(1);
+		
+	}
+
+	// 배열 비우기 : 삭제한 액터들 배열에서 삭제
+	enemies.Empty();
+}

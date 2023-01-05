@@ -4,6 +4,8 @@
 #include "EnemySpawningPool.h"
 #include "Enemy.h"
 #include "Components/ArrowComponent.h"
+#include "MyShootingGameModeBase.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AEnemySpawningPool::AEnemySpawningPool()
@@ -25,6 +27,8 @@ void AEnemySpawningPool::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	AGameModeBase* mode = UGameplayStatics::GetGameMode(this);
+	gamemode = Cast<AMyShootingGameModeBase>(mode);
 }
 
 // Called every frame
@@ -41,11 +45,15 @@ void AEnemySpawningPool::Tick(float DeltaTime)
 	{
 		// 에너미 블루프린트를 생성한다.
 		// Arrow 컴포넌트의 위치와 회전 상태로 맞춰서 생성한다.
-		GetWorld()->SpawnActor<AEnemy>(enemyFactory, spawnArrow->GetComponentLocation(), spawnArrow->GetComponentRotation());
+		AEnemy* enemy = GetWorld()->SpawnActor<AEnemy>(enemyFactory, spawnArrow->GetComponentLocation(), spawnArrow->GetComponentRotation());
+
+		gamemode->SaveEnemy(enemy);
 
 		// 누적된 시간을 다시 0초로 초기화한다.
 		currentTime = 0;
 	}
+
+
 
 
 }

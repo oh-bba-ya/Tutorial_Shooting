@@ -56,7 +56,6 @@ void AEnemy::BeginPlay()
 
 		if (target != nullptr)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("player"));
 			float temp = target->moveSpeed;
 
 			// 2-2. 플레이어의 위치 - 나의 위치 = 갈 방향을 설정한다.
@@ -115,5 +114,11 @@ void AEnemy::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherAc
 		Destroy();
 	}
 
+}
+
+void AEnemy::DestroyMySelf()
+{
+	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), explosion, GetActorLocation(), GetActorRotation());
+	Destroy();
 }
 

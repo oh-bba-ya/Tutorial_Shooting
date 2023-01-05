@@ -38,6 +38,15 @@ public:
 	UFUNCTION()
 		void OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
+
+	UPROPERTY(EditDefaultsOnly, Category = EnemySettings)
+	class UParticleSystem* explosion;
+
+
+	void DestroyMySelf();
+
+
+
 private:
 	FVector direction;
 	class APlayerFlight* target;

@@ -45,17 +45,39 @@ public:
 
 
 	// 생성한 Input Action, Mapping Context를 C++ 변수 만들기
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = PlayerSettings)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerSettings)
 		class UInputAction* ia_horizontal;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = PlayerSettings)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerSettings)
 		class UInputAction* ia_vertical;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite,  Category = PlayerSettings)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite,  Category = PlayerSettings)
 		class UInputAction* ia_fire;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = PlayerSettings)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerSettings)
+		class UInputAction* ia_boost;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerSettings)
+		class UInputAction* ia_ult;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerSettings)
 		class UInputMappingContext* imc_myMapping;
+
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerSettings)
+	int32 bulletCount = 1;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerSettings)
+	int32 bulletSpacing = 150;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerSettings)
+	float bulletAngle = 30;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerSettings)
+	bool isFire = true;
+
+	
+
 
 	void ReservationHitColor(float time);
 
@@ -69,8 +91,9 @@ public:
 
 
 private:
+	/*
+	// 기존 입력 함수
 	// 블루프린트에서 호출하기
-	
 	UFUNCTION(BlueprintCallable)
 	void Horizontal(float value);
 
@@ -79,16 +102,26 @@ private:
 
 	UFUNCTION(BlueprintCallable)
 	void FireBullet();		// action의 경우 parameter를 비워야한다. , 반환도 마찬가지 void
+
+	*/
+	UFUNCTION(BlueprintCallable)
+	void AddBoost();
+
+	UFUNCTION(BlueprintCallable)
+	void RemoveBoost();
 	
-	/*
+
+	
 	// EnhancedInput 함수
 		void Horizontal(const FInputActionValue& value);
 		void Vertical(const FInputActionValue& value);
 		void FireBullet();
-	*/
+		void AddBullet();
+		
+		UFUNCTION()
+		void ExplosionAll();
 
-
-
+	
 	float h;
 	float v;
 

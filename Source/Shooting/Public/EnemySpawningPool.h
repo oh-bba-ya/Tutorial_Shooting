@@ -37,6 +37,11 @@ public:
 	UPROPERTY(EditInstanceOnly, Category = PoolSettings)
 		class USceneComponent* rootScene;
 
+
+	class AMyShootingGameModeBase* gamemode = NULL;
+
+
+
 private:
 	float currentTime = 0;
 

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
+#include "Enemy.h"
 #include "MyShootingGameModeBase.generated.h"
 
 /**
@@ -38,6 +39,11 @@ public:
 	void ShowMenu();
 
 
+	TArray<class AEnemy*> enemies;
+
+	void SaveEnemy(AEnemy* enemy);
+
+	void RemoveEnemy();
 
 
 

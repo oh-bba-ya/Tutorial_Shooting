@@ -10,6 +10,10 @@
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "Enemy.h"
+#include "EngineUtils.h"
+#include "MyShootingGameModeBase.h"
+
 
 // Sets default values
 APlayerFlight::APlayerFlight()
@@ -33,6 +37,8 @@ APlayerFlight::APlayerFlight()
 
 	// 루트 컴포넌트의 자식 컴포넌트로 설정
 	meshComp->SetupAttachment(RootComponent);
+
+	meshComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 	// 메시 컴포넌트의 Static Mesh 항목에 큐브 파일을 할당한다.
 	ConstructorHelpers::FObjectFinder<UStaticMesh> cubeMesh(TEXT("/Script/Engine.StaticMesh'/Game/StarterContent/Shapes/Shape_Cube.Shape_Cube'"));
@@ -68,21 +74,21 @@ void APlayerFlight::BeginPlay()
 {
 	Super::BeginPlay();
 
+
+
 	// 플레이어 컨트롤러를 캐스팅한다.
 	APlayerController* playerCon = Cast<APlayerController>(GetController());
 
 	// nullPtr 체크
 	if (playerCon != nullptr) {
-		UE_LOG(LogTemp, Warning, TEXT("ptr"));
 		UEnhancedInputLocalPlayerSubsystem* subsys = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(playerCon->GetLocalPlayer());
 		
 		if (subsys != nullptr) {
-			UE_LOG(LogTemp, Warning, TEXT("ptr2"));
 			subsys->AddMappingContext(imc_myMapping, 0);
 		}
 	}
 	else {
-		UE_LOG(LogTemp, Warning, TEXT("Nullptr"));
+		
 	}
 
 	// 현재 색상 값을 저장한다
@@ -92,8 +98,6 @@ void APlayerFlight::BeginPlay()
 	// Material Interface에서 벡터 파라미터 값을 initColor 변수에 저장한다.
 	iMat->GetVectorParameterValue(param, initColor);
 
-	// 출력 확인
-	UE_LOG(LogTemp, Warning, TEXT("%f, %f, %f"), initColor.R, initColor.G, initColor.B);
 
 
 	// Material Interface를 이용해서 Material Instance Dynamic 개체를 만든다.
@@ -138,7 +142,7 @@ void APlayerFlight::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 	// 기존의 UInputComponent* 변수를 UEnhancedInputComponent* 로 변환한다.
 	UEnhancedInputComponent* enhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent);
 
-	/*
+	
 	// EnhancedInput 바인딩
 	// 함수 연결하기
 	enhancedInputComponent->BindAction(ia_horizontal, ETriggerEvent::Triggered, this, &APlayerFlight::Horizontal);
@@ -148,9 +152,17 @@ void APlayerFlight::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 	enhancedInputComponent->BindAction(ia_vertical, ETriggerEvent::Completed, this, &APlayerFlight::Vertical);
 
 	enhancedInputComponent->BindAction(ia_fire, ETriggerEvent::Triggered, this, &APlayerFlight::FireBullet);
-	*/
 
+	enhancedInputComponent->BindAction(ia_ult, ETriggerEvent::Triggered, this, &APlayerFlight::ExplosionAll);
+
+	// Started 파라미터를 설정하여 버튼 클릭 시작히 함수가 동작하도록 했다.
+	enhancedInputComponent->BindAction(ia_boost, ETriggerEvent::Started, this, &APlayerFlight::AddBoost);
 	
+	// Completed 파라미터 설정을 통해 키버튼에서 손가락을 떼는 순간 함수가 동작 되도록 했다.
+	enhancedInputComponent->BindAction(ia_boost, ETriggerEvent::Completed, this, &APlayerFlight::RemoveBoost);
+	
+
+	/*
 	// 기존 입력 방식 바인딩
 	// Horizontal Axis 입력에 함수를 연결한다.
 	PlayerInputComponent->BindAxis("Horizontal", this, &APlayerFlight::Horizontal);
@@ -161,11 +173,21 @@ void APlayerFlight::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
 
 	// Fire Action 입력에 함수를 연결한다.
-	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &APlayerFlight::FireBullet);
+	//PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &APlayerFlight::FireBullet);
+
+	PlayerInputComponent->BindAction("Boost", IE_Pressed, this, &APlayerFlight::AddBoost);
+
+	PlayerInputComponent->BindAction("Boost", IE_Released, this, &APlayerFlight::RemoveBoost);
+
 	
+	// Boost
+	*/
 
 
 }
+
+
+
 
 
 void APlayerFlight::ReservationHitColor(float time)
@@ -189,7 +211,7 @@ void APlayerFlight::ChangeOriginColor()
 }
 
 
-
+/*
 // 기존 입력방식 함수 주석처리
 // 좌우 입력이 있을 때 실행될 함수
 void APlayerFlight::Horizontal(float value) {
@@ -204,26 +226,26 @@ void APlayerFlight::Vertical(float value) {
 	direction.Z = v;
 	//UE_LOG(LogTemp, Warning, TEXT("v : %.4f"), v);
 }
+*/
 
 
-/*
 // EnhancedInput 입력 함수.
 void APlayerFlight::Horizontal(const FInputActionValue& value)
 {
-	UE_LOG(LogTemp, Warning, TEXT("hori"));
+	//UE_LOG(LogTemp, Warning, TEXT("hori"));
 	h = value.Get<float>();
-	UE_LOG(LogTemp, Warning, TEXT("h : %.4f"), h);
+	//UE_LOG(LogTemp, Warning, TEXT("h : %.4f"), h);
 	direction.Y = h;
 }
 
 void APlayerFlight::Vertical(const FInputActionValue& value)
 {
-	UE_LOG(LogTemp, Warning, TEXT("ver"));
+	//UE_LOG(LogTemp, Warning, TEXT("ver"));
 	v = value.Get<float>();
-	UE_LOG(LogTemp, Warning, TEXT("v : %.4f"), v);
+	//UE_LOG(LogTemp, Warning, TEXT("v : %.4f"), v);
 	direction.Z = v;
 }
-*/
+
 
 
 
@@ -231,27 +253,93 @@ void APlayerFlight::Vertical(const FInputActionValue& value)
 // 마우스 왼쪽 버튼을 눌렀을 때 실행될 함수.
 void APlayerFlight::FireBullet()
 {
-	
+	if (isFire) {
+		AddBullet();
+	}
+
+
+
+	// 총알 발사 효과음을 실행한다.
+	UGameplayStatics::PlaySound2D(this, fireSound);
+
+}
+
+void APlayerFlight::AddBullet()
+{
 	// 생성 위치 : 플레이어 위치 기준으로 플레이어 위에서
-	FVector spawnPosition = GetActorLocation() + GetActorUpVector() *90.0f;
+	FVector spawnPosition = GetActorLocation() + GetActorUpVector() * 90.0f;
+	
+	
+	// 발사 간격
+	float interval = 0.5f * (bulletCount -1) * bulletSpacing;
+
+	// 각도 (왼쪽 기준이기 때문에 -0.5f를 적용)
+	float offset = -0.5f * (bulletCount - 1) * bulletAngle;
+
+	FRotator rot = FRotator(0,offset,0);
+
 
 	// 생성 방향 : 월드 축 기준이므로 pitch 방향이다 .(Roll , yaw 기준으로 말해야한다.)
 	// 주의 사항 : pitch, yaw, roll 순이다. 에디터는 roll, pitch ,yaw 순이다.
 	FRotator spawnRotation = FRotator(90.0f, 0, 0);
 
+
 	// 어떤 상황에서든 생성시키기.
 	FActorSpawnParameters param;
 	param.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
-	// 총알을 생성한다.
-	// 총알 블루프린트 변수
-	GetWorld()->SpawnActor<ABullet>(bulletFactory, spawnPosition, spawnRotation,param);
+	// 기준점 설정
+	spawnPosition = FVector(spawnPosition.X, spawnPosition.Y - interval, spawnPosition.Z);
 
-	// 총알 발사 효과음을 실행한다.
-	UGameplayStatics::PlaySound2D(this, fireSound);
 
+
+	for (int i = 0; i < bulletCount; i++) {
+		ABullet* bullet = GetWorld()->SpawnActor<ABullet>(bulletFactory, spawnPosition, spawnRotation, param);
+
+		// 기준점에서부터 오른쪽으로 간격만큼 더해준다.
+		spawnPosition = FVector(spawnPosition.X, spawnPosition.Y + bulletSpacing, spawnPosition.Z);
+
+		// 생성된 총알(Bullet)을 bulletAngle 만큼 일정하게 회전시킨다.
+		bullet->AddActorLocalRotation(rot);
+		offset += bulletAngle;
+		rot = FRotator(0, offset, 0);
+
+	}
+
+}
+
+
+// 궁극기 폭탄 함수
+void APlayerFlight::ExplosionAll()
+{
+	/*
+	// TActorIteraotr 사용
+	for (TActorIterator<AEnemy> it(GetWorld()); it; ++it) {
+		it->DestroyMySelf();
+		it->Destroy();
+	}
+	*/
+
+	
+	// 배열 사용
+	AGameModeBase* mode = UGameplayStatics::GetGameMode(this);
+	AMyShootingGameModeBase* myGameMode = Cast<AMyShootingGameModeBase>(mode);
+
+	myGameMode->RemoveEnemy();
+	
+
+}
+
+void APlayerFlight::AddBoost()
+{
+	moveSpeed *= 2;
 
 
 }
 
+void APlayerFlight::RemoveBoost()
+{
+	// moveSpeed /= 2;
+	moveSpeed *= 0.5f;			// 나눗셈 연산보다 곱셈 연산량이 더 적다.
+}
 
