@@ -312,21 +312,27 @@ void APlayerFlight::AddBullet()
 // 궁극기 폭탄 함수
 void APlayerFlight::ExplosionAll()
 {
+
+
 	/*
-	// TActorIteraotr 사용
+	// 1. TActorIteraotr 사용
 	for (TActorIterator<AEnemy> it(GetWorld()); it; ++it) {
 		it->DestroyMySelf();
 		it->Destroy();
 	}
 	*/
 
-	
-	// 배열 사용
+	/*
+	// 2. 배열 사용
 	AGameModeBase* mode = UGameplayStatics::GetGameMode(this);
 	AMyShootingGameModeBase* myGameMode = Cast<AMyShootingGameModeBase>(mode);
 
 	myGameMode->RemoveEnemy();
-	
+	*/
+
+	// 3. Delegate 실행한다.
+	//playerBomb.Broadcast();   // 플레이어를 추적하는 Enemy 삭제
+	OnSetDirection.Broadcast(FVector(0,1,0)); // 플레이어를 추적하는 Enemy 방향 바꾸기
 
 }
 

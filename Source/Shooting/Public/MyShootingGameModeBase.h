@@ -35,6 +35,8 @@ public:
 	UPROPERTY(EditAnywhere, Category = MyDefaultSetting)
 	TSubclassOf<class UMenuWidget> menuWidget;   // 블루프린트를 가져오고 싶을땐 TSubclassOf
 
+	UPROPERTY(EditAnywhere, Category = MyDefaultSetting)
+		TSubclassOf<class ABossActor> bossActor;
 
 	void ShowMenu();
 
@@ -57,6 +59,7 @@ private:
 
 	class UMenuWidget* menu_UI;
 
+	bool isSpawn = false;
 
 
 	// 최고 점수를 파일로 저장한다. (절대경로)
@@ -66,7 +69,8 @@ private:
 	//FString filePath2 = FString("../../../Content/SaveScore/BestScore.txt");
 
 
-
+	void SpawnBoss();
+	void StopAllSpawn();
 
 	
 };

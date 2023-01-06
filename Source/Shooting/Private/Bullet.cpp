@@ -93,8 +93,7 @@ void ABullet::OnBulletOverlap(UPrimitiveComponent* OverlappedComponent, AActor* 
 
 
 
-		myGM->AddScore(1);
-		UE_LOG(LogTemp, Warning, TEXT("point : %d"), myGM->GetCurrentScore());
+		myGM->AddScore(setPoint);
 	}
 
 	// 자기 자신을 제거

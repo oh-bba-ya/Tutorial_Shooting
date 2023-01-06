@@ -41,7 +41,8 @@ public:
 
 
 
-
+	UPROPERTY(EditDefaultsOnly, Category = BulletSettings)
+		int setPoint = 1;
 
 private:
 	FVector direction;

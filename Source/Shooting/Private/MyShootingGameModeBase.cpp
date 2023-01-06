@@ -5,9 +5,14 @@
 #include "MainWidget.h"
 #include "MenuWidget.h"
 #include "Kismet/GameplayStatics.h"
+#include "BossActor.h"
+#include "EnemySpawningPool.h"
+#include "EngineUtils.h"
 
 void AMyShootingGameModeBase::BeginPlay()
 {
+	//Super::BeginPlay();
+
 	// 위젯 블루프린트를 생성한다.
 	main_UI = CreateWidget<UMainWidget>(GetWorld(), mainWidget);
 
@@ -44,7 +49,6 @@ void AMyShootingGameModeBase::BeginPlay()
 	}
 	FString testPath = FPaths::ProjectContentDir()+TEXT("SaveScore/SaveScore.txt");
 
-	UE_LOG(LogTemp, Warning, TEXT("test path: %s"), *testPath);
 
 	GEngine->AddOnScreenDebugMessage(1, 5.0f, FColor::Emerald, TEXT("LogTest"), true);
 
@@ -60,8 +64,24 @@ void AMyShootingGameModeBase::AddScore(int32 point)
 		// 문자열을 전달할때 ' * '를 써야한다. -> 포인터 아님 FString가서 * 보면 오퍼레이터로 구현되어 있음
 		bool isSaved = FFileHelper::SaveStringToFile(FString::FromInt(bestScore),*filePath);
 		
-		UE_LOG(LogTemp, Warning, TEXT("%s"), isSaved ? TEXT("True") : TEXT("False"));
 	}
+
+	// 만일, 현재 점수가 30점 이상이면
+	if (currentScore >= 30) {
+		if (!isSpawn) {
+			isSpawn = true;
+
+			// 4초 뒤에 보스를 생성한다.
+			FTimerHandle spawnHandle;
+			GetWorld()->GetTimerManager().SetTimer(spawnHandle, this, &AMyShootingGameModeBase::SpawnBoss, 4, false);
+
+			// 모든 스폰을 중단한다.
+			StopAllSpawn();
+		}
+
+	}
+
+
 
 	// 현재 점수를 위젯의 curScore 텍스트 블록에 반영한다.
 	if (main_UI != nullptr) {
@@ -116,4 +136,19 @@ void AMyShootingGameModeBase::RemoveEnemy()
 
 	// 배열 비우기 : 삭제한 액터들 배열에서 삭제
 	enemies.Empty();
+}
+
+void AMyShootingGameModeBase::SpawnBoss()
+{
+	GetWorld()->SpawnActor<ABossActor>(bossActor, FVector(0, 0, 700), FRotator::ZeroRotator);
+
+
+}
+
+void AMyShootingGameModeBase::StopAllSpawn()
+{
+	for (TActorIterator<AEnemySpawningPool> pool(GetWorld()); pool; ++pool) {
+		pool->SetSpawn();
+	}
+
 }

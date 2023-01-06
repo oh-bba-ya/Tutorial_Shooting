@@ -40,9 +40,13 @@ public:
 
 	class AMyShootingGameModeBase* gamemode = NULL;
 
+	void SetSpawn();
+
 
 
 private:
 	float currentTime = 0;
+
+	bool isSpawn = true;
 
 };

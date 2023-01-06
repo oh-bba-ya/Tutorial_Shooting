@@ -42,9 +42,12 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = EnemySettings)
 	class UParticleSystem* explosion;
 
-
+	// Delegate를 사용하기 위해서는 UFUNCTION을 해줘야한다.
+	UFUNCTION()
 	void DestroyMySelf();
 
+	UFUNCTION()
+	void SetNewDirection(FVector newDir);
 
 
 private:

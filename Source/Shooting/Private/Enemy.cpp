@@ -39,6 +39,11 @@ void AEnemy::BeginPlay()
 	// 1. 추첨을 한다. 확률은 변수를 이용해서 70:30 비율로 한다.
 	int32 drawNumber = FMath::RandRange(1, 100);
 
+	for (TActorIterator<APlayerFlight> it(GetWorld()); it; ++it)
+	{
+		target = *it;
+	}
+
 	// 2. 만일, 뽑은 값이 traceRate 보다 작으면...
 	if (drawNumber <= traceRate)
 	{
@@ -49,10 +54,6 @@ void AEnemy::BeginPlay()
 
 		// 월드에서 특정한 객체를 찾는 방법 - 2
 
-		for (TActorIterator<APlayerFlight> it(GetWorld()); it; ++it)
-		{
-			target = *it;
-		}
 
 		if (target != nullptr)
 		{
@@ -62,6 +63,14 @@ void AEnemy::BeginPlay()
 			FVector targetDir = target->GetActorLocation() - GetActorLocation();
 			targetDir.Normalize();
 			direction = targetDir;
+
+			/*
+			// 날 추적하는 Enemy만 삭제한다.
+			target->playerBomb.AddDynamic(this, &AEnemy::DestroyMySelf);
+			*/
+
+			// 날 추적하는 Enemy의 방향을 바꾼다.
+
 		}
 
 	}
@@ -75,6 +84,8 @@ void AEnemy::BeginPlay()
 	boxComp->OnComponentBeginOverlap.AddDynamic(this, &AEnemy::OnOverlap);
 	boxComp->SetGenerateOverlapEvents(true);
 	
+
+	target->OnSetDirection.AddDynamic(this, &AEnemy::SetNewDirection);
 }
 
 // Called every frame
@@ -119,6 +130,17 @@ void AEnemy::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherAc
 void AEnemy::DestroyMySelf()
 {
 	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), explosion, GetActorLocation(), GetActorRotation());
+	
+	// 델리게이트에 걸어놓은 자기 함수를 제거한다.
+	target->playerBomb.RemoveDynamic(this, &AEnemy::DestroyMySelf);
+	
 	Destroy();
+
+}
+
+void AEnemy::SetNewDirection(FVector newDir)
+{
+	// 이동 방향을 newDir로 바꾼다.
+	direction = newDir;
 }
 

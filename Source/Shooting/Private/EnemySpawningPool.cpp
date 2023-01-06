@@ -43,11 +43,14 @@ void AEnemySpawningPool::Tick(float DeltaTime)
 	// 만일, 누적된 시간이 spawnCool에 지정한 시간보다 크거나 같다면...
 	if (currentTime >= spawnCool)
 	{
-		// 에너미 블루프린트를 생성한다.
-		// Arrow 컴포넌트의 위치와 회전 상태로 맞춰서 생성한다.
-		AEnemy* enemy = GetWorld()->SpawnActor<AEnemy>(enemyFactory, spawnArrow->GetComponentLocation(), spawnArrow->GetComponentRotation());
+		if (isSpawn) {
+			// 에너미 블루프린트를 생성한다.
+			// Arrow 컴포넌트의 위치와 회전 상태로 맞춰서 생성한다.
+			AEnemy* enemy = GetWorld()->SpawnActor<AEnemy>(enemyFactory, spawnArrow->GetComponentLocation(), spawnArrow->GetComponentRotation());
 
-		gamemode->SaveEnemy(enemy);
+			gamemode->SaveEnemy(enemy);
+		}
+
 
 		// 누적된 시간을 다시 0초로 초기화한다.
 		currentTime = 0;
@@ -56,5 +59,10 @@ void AEnemySpawningPool::Tick(float DeltaTime)
 
 
 
+}
+
+void AEnemySpawningPool::SetSpawn()
+{
+	isSpawn = !isSpawn;
 }
 

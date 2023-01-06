@@ -8,6 +8,14 @@
 #include "PlayerFlight.generated.h"
 
 
+// 1. 매개변수가 없는 함수
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FULTbomb);
+
+// 2.  벡터를 인자로 넘겨받는 델리게이트 함수 선언(FDirectionModifier)
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDirectionModifier, FVector, newDir);
+
+
+
 UCLASS()
 class SHOOTING_API APlayerFlight : public APawn
 {
@@ -88,6 +96,9 @@ public:
 	class USoundBase* fireSound;
 
 	
+	FULTbomb playerBomb;
+
+	FDirectionModifier OnSetDirection;
 
 
 private:
