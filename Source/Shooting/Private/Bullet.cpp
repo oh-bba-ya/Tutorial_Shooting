@@ -27,9 +27,10 @@ ABullet::ABullet()
 	meshComp->SetupAttachment(RootComponent);
 	meshComp->SetRelativeLocation(FVector(0, 0, -50.0f));
 
+	/*
 	// 박스 컴포넌트의 콜리전 프리셋을 Bullet으로 설정한다.
 	boxComp->SetCollisionProfileName(TEXT("Bullet"));
-
+	*/
 
 }
 
@@ -39,7 +40,7 @@ void ABullet::BeginPlay()
 	Super::BeginPlay();
 
 	// 박스 컴포넌트의 충돌 오버랩 이벤트에 BulletOverlap 함수를 연결한다.
-	boxComp->OnComponentBeginOverlap.AddDynamic(this, &ABullet::OnBulletOverlap);
+	//boxComp->OnComponentBeginOverlap.AddDynamic(this, &ABullet::OnBulletOverlap);
 	
 
 	// 2초 후 액터 제거
@@ -66,6 +67,7 @@ void ABullet::Tick(float DeltaTime)
 	SetActorLocation(GetActorLocation() + direction * moveSpeed * DeltaTime);
 }
 
+/*
 void ABullet::OnBulletOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	// 충돌한 액터를 AEnemy 클래스로 변환해본다.
@@ -99,6 +101,7 @@ void ABullet::OnBulletOverlap(UPrimitiveComponent* OverlappedComponent, AActor* 
 	// 자기 자신을 제거
 	Destroy();
 }
+*/
 
 void ABullet::DestroyMySelf()
 {

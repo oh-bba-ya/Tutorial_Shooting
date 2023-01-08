@@ -32,6 +32,7 @@ void ABossActor::BeginPlay()
 	Super::BeginPlay();
 
 	startPos = GetActorLocation();
+
 	
 }
 
@@ -60,6 +61,24 @@ void ABossActor::Tick(float DeltaTime)
 	FVector result = FMath::Lerp(startPos, endPos,speed);
 	SetActorLocation(result);
 
+
+
+	if (currentTime > pattern_delay) {
+		BossAttack1(15, 6);
+		currentTime = 0;
+	}
+	else {
+		currentTime += DeltaTime;
+	}
+
+
+}
+
+// Called when the game starts or when spawned
+void ABossActor::BossAttack1(float angle, int32 count)
+{
+	// angle 
+	UE_LOG(LogTemp, Warning, TEXT("Boss Bullet Spawn"));
 
 }
 
