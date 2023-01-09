@@ -115,11 +115,8 @@ private:
 	void FireBullet();		// action의 경우 parameter를 비워야한다. , 반환도 마찬가지 void
 
 	*/
-	UFUNCTION(BlueprintCallable)
-	void AddBoost();
 
-	UFUNCTION(BlueprintCallable)
-	void RemoveBoost();
+	void CheckEnemies();
 	
 
 	
@@ -131,6 +128,12 @@ private:
 		
 		UFUNCTION()
 		void ExplosionAll();
+
+		UFUNCTION(BlueprintCallable)
+			void AddBoost();
+
+		UFUNCTION(BlueprintCallable)
+			void RemoveBoost();
 
 	
 	float h;

@@ -13,6 +13,7 @@
 #include "Enemy.h"
 #include "EngineUtils.h"
 #include "MyShootingGameModeBase.h"
+#include "DrawDebugHelpers.h"
 
 
 // Sets default values
@@ -153,7 +154,7 @@ void APlayerFlight::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
 	enhancedInputComponent->BindAction(ia_fire, ETriggerEvent::Triggered, this, &APlayerFlight::FireBullet);
 
-	enhancedInputComponent->BindAction(ia_ult, ETriggerEvent::Triggered, this, &APlayerFlight::ExplosionAll);
+	enhancedInputComponent->BindAction(ia_ult, ETriggerEvent::Triggered, this, &APlayerFlight::CheckEnemies);
 
 	// Started 파라미터를 설정하여 버튼 클릭 시작히 함수가 동작하도록 했다.
 	enhancedInputComponent->BindAction(ia_boost, ETriggerEvent::Started, this, &APlayerFlight::AddBoost);
@@ -228,6 +229,38 @@ void APlayerFlight::Vertical(float value) {
 }
 */
 
+
+void APlayerFlight::CheckEnemies()
+{
+	UE_LOG(LogTemp, Warning, TEXT("UTL"));
+	// 반경 5m 이내에 있는 모든 AEnemy 액터들을 감지한다.
+	// 감지된 Enemy들의 정보를 담을 변수의 배열
+	TArray<FOverlapResult> enemiesInfo;
+
+	FVector centerLoc = GetActorLocation() + GetActorUpVector() * 700;
+
+	FQuat centerRot = GetActorRotation().Quaternion();
+
+	FCollisionObjectQueryParams params = ECC_GameTraceChannel2;
+
+	FCollisionShape checkShape = FCollisionShape::MakeSphere(500);
+
+	GetWorld()->OverlapMultiByObjectType(enemiesInfo, centerLoc, centerRot, params, checkShape);
+	UE_LOG(LogTemp, Warning, TEXT("%d"), enemiesInfo.Num());
+
+	// 체크된 모든 에너미의 이름을 출력한다.
+	for (FOverlapResult enemyinfo : enemiesInfo) {
+		// 충돌 체크를 위한 출력
+		UE_LOG(LogTemp, Warning, TEXT("Hited : %s"), *enemyinfo.GetActor()->GetName());
+
+		enemyinfo.GetActor()->Destroy();
+	}
+
+	// 마지막 파라미터에 입력하는 segments의 수에 따라 원이 부드러워지거나 각지게된다. (변의 개수)
+	DrawDebugSphere(GetWorld(),centerLoc, 500,20,FColor::Yellow, false, 2);
+
+	
+}
 
 // EnhancedInput 입력 함수.
 void APlayerFlight::Horizontal(const FInputActionValue& value)

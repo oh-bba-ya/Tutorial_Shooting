@@ -4,6 +4,8 @@
 #include "BossActor.h"
 #include "Components/BoxComponent.h"
 #include "Components/StaticMeshComponent.h"
+#include "EnemyBullet.h"
+#include "Kismet/KismetMathLibrary.h"
 
 // Sets default values
 ABossActor::ABossActor()
@@ -79,6 +81,34 @@ void ABossActor::BossAttack1(float angle, int32 count)
 {
 	// angle 
 	UE_LOG(LogTemp, Warning, TEXT("Boss Bullet Spawn"));
+
+
+	// 시작 각도 = 270 - (angle * (count -1) * 0.5f)
+	float startAngle = 270 - (angle * (count - 1) * 0.5f);
+
+	for (int32 i = 0; i < count; i++) {
+		// 기본 좌표 (0,rcos@, rsin@)
+		// 곱해지는 상수의 값에 따라 총알들의 거리가 벌어진다.
+		FVector bullet_base = FVector(0
+			, 50 * FMath::Cos(FMath::DegreesToRadians(startAngle + angle * i))
+			, 50 * FMath::Sin(FMath::DegreesToRadians(startAngle + angle * i)));
+
+
+
+		AEnemyBullet* enemyActor = GetWorld()->SpawnActor<AEnemyBullet>(enemyBullet, 
+			GetActorLocation() + bullet_base,
+			FRotator(-90,0,0));
+
+		//enemyActor->SetDirection(bullet_base.GetSafeNormal());
+
+
+		// Up Vector 축을 Bullet_base 방향으로 회전시켰을 때의 로테이터  값을 계산한다.
+		// 첫번째 파라미터가 고정, 2번째파라미터가 바꿀값
+		FRotator rot = UKismetMathLibrary::MakeRotFromZX(enemyActor->GetActorUpVector(),bullet_base.GetSafeNormal());
+	
+		enemyActor->SetActorRotation(rot);
+		
+	}
 
 }
 

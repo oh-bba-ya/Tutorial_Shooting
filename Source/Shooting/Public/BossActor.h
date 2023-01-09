@@ -41,7 +41,7 @@ private:
 	FVector endPos;
 
 	float currentTime = 0;
-	float pattern_delay = 5.0f;
+	float pattern_delay = 2.0f;
 
 	void BossAttack1(float angle,int32 count);
 };

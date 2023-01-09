@@ -17,7 +17,7 @@ APlayerBullet::APlayerBullet() {
 void APlayerBullet::BeginPlay()
 {
 	Super::BeginPlay();
-
+	//SetDirection(GetActorForwardVector());
 	boxComp->OnComponentBeginOverlap.AddDynamic(this, &APlayerBullet::OnBulletOverlap);
 
 

@@ -26,6 +26,11 @@ public:
 
 	void PrintCurrentScore();
 
+	// Widget 애니메이션의 경우 meta에 BindWidgetAnim 까지 반드시 써야한다.
+	UPROPERTY(EditAnywhere, Category = "MySetting|Score", meta = (BindWidgetAnim), Transient)
+		class UWidgetAnimation* scoreAnim;
+
+
 
 	
 };

@@ -108,3 +108,10 @@ void ABullet::DestroyMySelf()
 	Destroy();
 }
 
+void ABullet::SetDirection(FVector value)
+{
+	direction = value;
+}
+
+
+
