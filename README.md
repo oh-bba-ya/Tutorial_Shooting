@@ -21,7 +21,7 @@ Skill : Space Bar
 
 development explanation
 -------------
-##(1) Pawn Movement  
+## (1) Pawn Movement  
 Unreal Engine에서 기존에 사용하던 Axis and Action mappings deprecated 될 예정이기 때문에 Enhanced Input을 통해 Movement를 구현했습니다.  
 
 ![01](https://user-images.githubusercontent.com/49023743/218031643-727fefb8-ac76-455f-92be-abed6d32b501.PNG)
@@ -29,14 +29,14 @@ Unreal Engine에서 기존에 사용하던 Axis and Action mappings deprecated �
 
 
 
-##(2) Bullet  
+## (2) Bullet  
 Player가 Moust Left 클릭을 할때 Actor를 Spawn 발사하는 방식입니다.
 player의 블루프린트 클래스 Details 패널에서 원하는 Count, Spacing, Angle을 입력한다면 입력에 따라 총알이 회전 및 추가되어 발사됩니다.  (Default Settings : Count = 1, Spacing = 150, bulletAngle = 30)  
 ![03](https://user-images.githubusercontent.com/49023743/218033283-acfbe319-76d6-485d-93c6-df25485930ab.PNG)
 
 
 
-##(3) Enemy  
+## (3) Enemy  
 EnemySpawningPool 클래스를 통해 Enemy를 소환을 관리했습니다. Enemy의 경우 Actor Class로서 Player의 위치로 Enemy가 움직입니다.  
 level에 배치된 BP_EnemySpawningPool 클래스를 통해 Enemy가 소환됩니다.  
 ![04](https://user-images.githubusercontent.com/49023743/218037009-092b78f0-2931-4991-8553-b7e07a86d274.PNG)
@@ -44,7 +44,7 @@ level에 배치된 BP_EnemySpawningPool 클래스를 통해 Enemy가 소환됩�
 
 
 
-##(4) Widget  
+## (4) Widget  
 - Score Widget의 경우 Game 시작시부터 Viewport에 생성되며 Player가 Enemy를 파괴할시에 Widget Animation을 통해 다음과 같이 Animation이 재생됩니다.  
 ![06](https://user-images.githubusercontent.com/49023743/218037809-2f0172f0-b851-4a7e-80e3-fb479017fed6.PNG)
 
@@ -56,7 +56,7 @@ level에 배치된 BP_EnemySpawningPool 클래스를 통해 Enemy가 소환됩�
 
 
 
-##(5) Skill  
+## (5) Skill  
 Space Bar 키를 누름으로써 Enemy를 삭제시킬 수 있습니다. (Draw Debug로 그려지는 Sphere 범위 안에 있는 모든 Enemy)
 <img width="80%" src="https://user-images.githubusercontent.com/49023743/218042736-51b4c1df-37db-4d0d-8849-c447bca8ef32.gif"/>
 
