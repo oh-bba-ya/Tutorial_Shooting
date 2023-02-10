@@ -30,10 +30,21 @@ Unreal Engine에서 기존에 사용하던 Axis and Action mappings deprecated �
 
 
 (2) Bullet  
+Player가 Moust Left 클릭을 할때 Actor를 Spawn 발사하는 방식입니다.
 player의 블루프린트 클래스 Details 패널에서 원하는 Count, Spacing, Angle을 입력한다면 입력에 따라 총알이 회전 및 추가되어 발사됩니다.  (Default Settings : Count = 1, Spacing = 150, bulletAngle = 30)
 ![03](https://user-images.githubusercontent.com/49023743/218033283-acfbe319-76d6-485d-93c6-df25485930ab.PNG)
 
 
 
-(3) 
+(3) Enemy  
+EnemySpawningPool 클래스를 통해 Enemy를 소환을 관리했습니다. Enemy의 경우 Actor Class로서 Player의 위치로 Enemy가 움직입니다.  
+level에 배치된 BP_EnemySpawningPool 클래스를 통해 Enemy가 소환됩니다.  
+![04](https://user-images.githubusercontent.com/49023743/218037009-092b78f0-2931-4991-8553-b7e07a86d274.PNG)
+
+
+(4) Widget  
+- Score Widget의 경우 Game 시작시부터 Viewport에 생성되며 Player가 Enemy를 파괴할시에 Widget Animation을 통해 다음과 같이 Animation이 재생됩니다.  
+
+
+
 
