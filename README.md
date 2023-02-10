@@ -34,6 +34,7 @@ Player가 Moust Left 클릭을 할때 Actor를 Spawn 발사하는 방식입니�
 player의 블루프린트 클래스 Details 패널에서 원하는 Count, Spacing, Angle을 입력한다면 입력에 따라 총알이 회전 및 추가되어 발사됩니다.  (Default Settings : Count = 1, Spacing = 150, bulletAngle = 30)  
 ![03](https://user-images.githubusercontent.com/49023743/218033283-acfbe319-76d6-485d-93c6-df25485930ab.PNG)
   
+<img width="80%" src="https://user-images.githubusercontent.com/49023743/218135016-3dd397a6-d132-492b-bac1-aa42e1793d57.gif"/>
 
 
 
