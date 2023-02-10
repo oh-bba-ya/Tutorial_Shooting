@@ -61,5 +61,18 @@ level에 배치된 BP_EnemySpawningPool 클래스를 통해 Enemy가 소환됩�
 
 ## (5) Skill  
 Space Bar 키를 누름으로써 Enemy를 삭제시킬 수 있습니다. (Draw Debug로 그려지는 Sphere 범위 안에 있는 모든 Enemy를 파괴시킵니다.)  
-<img width="80%" src="https://user-images.githubusercontent.com/49023743/218042736-51b4c1df-37db-4d0d-8849-c447bca8ef32.gif"/>
+<img width="80%" src="https://user-images.githubusercontent.com/49023743/218042736-51b4c1df-37db-4d0d-8849-c447bca8ef32.gif"/>  
+
+
+  
+  
+## (6) Obstacle and Shield  
+- 블랙홀안에서는 플레이어가 공격하지 못합니다. 블랙홀은 Random한 위치로 계속 옮겨집니다.  
+
+
+
+
+- Shield의 경우 플레이어와 충돌할시 하위 액터로 부착되며 Enemy의 충돌을 막아주게 됩니다.
+
+
 
