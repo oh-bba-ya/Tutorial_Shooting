@@ -11,9 +11,9 @@ Description
 -------------
 Key Info
 
-이동 : w,a,s,d
-공격 : Mouse Left Cilck
-Speed Up : Left Shift
+이동 : w,a,s,d  
+공격 : Mouse Left Cilck  
+Speed Up : Left Shift  
 
 
 
