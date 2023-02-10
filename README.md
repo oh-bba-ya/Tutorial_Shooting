@@ -48,6 +48,8 @@ level에 배치된 BP_EnemySpawningPool 클래스를 통해 Enemy가 소환됩�
 - Score Widget의 경우 Game 시작시부터 Viewport에 생성되며 Player가 Enemy를 파괴할시에 Widget Animation을 통해 다음과 같이 Animation이 재생됩니다.  
 ![06](https://user-images.githubusercontent.com/49023743/218037809-2f0172f0-b851-4a7e-80e3-fb479017fed6.PNG)
 
+<img width="80%" src="https://user-images.githubusercontent.com/49023743/218042679-25333dc1-a8e5-4d3a-a221-6b3ee22fa857.gif
+"/>
 
 
 - Game Over Widget의 경우 Player가 파괴되었을시 Viewport에 추가가 됩니다.  
