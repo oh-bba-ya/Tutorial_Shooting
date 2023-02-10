@@ -76,3 +76,13 @@ Space Bar 키를 누름으로써 Enemy를 삭제시킬 수 있습니다. (Draw D
 <img width="80%" src="https://user-images.githubusercontent.com/49023743/218140551-74955c83-cc69-4037-ab16-9e3b28c09a23.gif"/>  
 
 
+ETC
+-------------
+## (1) Boss  
+- 기본적인 Shooting 게임에 등장하는 보스를 구현하려고 했지만 공격패턴 클래스를 구현하는데 실패하여 미완성으로 남겨둔 Boss입니다.
+  - 일정 위치까지 보스가 이동하며 원형으로 Bullet을 발사합니다.
+
+
+
+
+
