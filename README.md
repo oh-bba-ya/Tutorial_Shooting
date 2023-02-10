@@ -68,11 +68,11 @@ Space Bar 키를 누름으로써 Enemy를 삭제시킬 수 있습니다. (Draw D
   
 ## (6) Obstacle and Shield  
 - 블랙홀안에서는 플레이어가 공격하지 못합니다. 블랙홀은 Random한 위치로 계속 옮겨집니다.  
-
+<img width="80%" src="https://user-images.githubusercontent.com/49023743/218140419-642a4367-388f-4465-b8fc-1a234c87aa56.gif"/>  
 
 
 
 - Shield의 경우 플레이어와 충돌할시 하위 액터로 부착되며 Enemy의 충돌을 막아주게 됩니다.
-
+<img width="80%" src="https://user-images.githubusercontent.com/49023743/218140551-74955c83-cc69-4037-ab16-9e3b28c09a23.gif"/>  
 
 
