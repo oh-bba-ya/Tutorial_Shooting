@@ -16,7 +16,7 @@ Key Info
 이동 : w,a,s,d  
 공격 : Mouse Left Cilck  
 Speed Up : Left Shift  
-
+Skill : Space Bar
 
 
 development explanation
@@ -42,9 +42,21 @@ level에 배치된 BP_EnemySpawningPool 클래스를 통해 Enemy가 소환됩�
 ![04](https://user-images.githubusercontent.com/49023743/218037009-092b78f0-2931-4991-8553-b7e07a86d274.PNG)
 
 
+
+
 (4) Widget  
 - Score Widget의 경우 Game 시작시부터 Viewport에 생성되며 Player가 Enemy를 파괴할시에 Widget Animation을 통해 다음과 같이 Animation이 재생됩니다.  
+![06](https://user-images.githubusercontent.com/49023743/218037809-2f0172f0-b851-4a7e-80e3-fb479017fed6.PNG)
 
 
+
+- Game Over Widget의 경우 Player가 파괴되었을시 Viewport에 추가가 됩니다.  
+
+![05](https://user-images.githubusercontent.com/49023743/218037785-7cdb7c99-54d6-4a51-9840-69d250cf8a9a.PNG)
+
+
+
+(5) Skill  
+Space Bar 키를 누름으로써 Enemy를 삭제시킬 수 있습니다. (Draw Debug로 그려지는 Sphere 범위 안에 있는 모든 Enemy)
 
 
