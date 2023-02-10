@@ -82,7 +82,7 @@ ETC
 - 기본적인 Shooting 게임에 등장하는 보스를 구현하려고 했지만 공격패턴 클래스를 구현하는데 실패하여 미완성으로 남겨둔 Boss입니다.
   - 일정 위치까지 보스가 이동하며 원형으로 Bullet을 발사합니다.
 
-
+<img width="80%" src="https://user-images.githubusercontent.com/49023743/218143587-f311b530-fc4d-4750-8646-15e002ff5c99.gif"/>  
 
 
 
